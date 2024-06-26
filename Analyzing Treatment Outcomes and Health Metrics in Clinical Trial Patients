@@ -1,0 +1,141 @@
+-- Step 1: Creating Table
+CREATE TABLE Trial_1_Data (
+    PatientID INT,
+    Age INT,
+    Sex VARCHAR(6),
+    Treatment VARCHAR(11),
+    EfficacyScore DECIMAL(4,2),
+    SideEffect VARCHAR(3),
+    BloodPressure VARCHAR(10),
+    DateVisited DATE,
+    BMI DECIMAL(5,2),
+    Cholesterol INT,
+    SmokingStatus VARCHAR(10),
+    DiabetesStatus VARCHAR(3),
+    FamilyHistory VARCHAR(3),
+    Ethnicity VARCHAR(20),
+    EducationLevel VARCHAR(20),
+    Occupation VARCHAR(20)
+);
+
+-- Step 2: Inserting Data into the Table
+INSERT INTO Trial_1_Data (
+    PatientID, Age, Sex, Treatment, EfficacyScore, SideEffect, BloodPressure, DateVisited, 
+    BMI, Cholesterol, SmokingStatus, DiabetesStatus, FamilyHistory, Ethnicity, 
+    EducationLevel, Occupation
+)
+VALUES
+    (1, 45, 'M', 'Treatment A', 8.2, 'No', '120/80', '2022-01-05', 25.3, 180, 'Non-smoker', 'No', 'Yes', 'Caucasian', 'Graduate', 'Healthcare'),
+    (2, 37, 'F', 'Treatment B', 6.5, 'Yes', '130/90', '2022-01-10', 29.1, 220, 'Smoker', 'Yes', 'No', 'African', 'High School', 'Sales'),
+    (3, 52, 'F', 'Treatment A', 7.8, 'No', '140/95', '2022-01-15', 31.2, 190, 'Non-smoker', 'Yes', 'Yes', 'Asian', 'Graduate', 'IT'),
+    (4, 63, 'M', 'Treatment B', 5.3, 'Yes', '125/82', '2022-01-20', 27.6, 250, 'Non-smoker', 'No', 'Yes', 'Caucasian', 'High School', 'Retired'),
+    (5, 41, 'M', 'Treatment A', 8.7, 'No', '118/75', '2022-01-25', 23.9, 170, 'Smoker', 'Yes', 'No', 'African', 'Graduate', 'Engineering'),
+    (6, 56, 'F', 'Treatment B', 6.1, 'Yes', '135/88', '2022-01-30', 28.3, 200, 'Non-smoker', 'Yes', 'Yes', 'Asian', 'High School', 'Education'),
+    (7, 49, 'F', 'Treatment A', 7.2, 'No', '130/85', '2022-02-04', 30.1, 210, 'Non-smoker', 'Yes', 'Yes', 'Caucasian', 'Graduate', 'Healthcare'),
+    (8, 39, 'M', 'Treatment B', 5.8, 'Yes', '123/78', '2022-02-09', 26.8, 185, 'Smoker', 'No', 'No', 'African', 'High School', 'Sales'),
+    (9, 58, 'M', 'Treatment A', 8.5, 'No', '122/80', '2022-02-14', 29.7, 230, 'Non-smoker', 'Yes', 'Yes', 'Asian', 'Graduate', 'IT'),
+    (10, 44, 'F', 'Treatment B', 6.9, 'Yes', '128/83', '2022-02-19', 27.4, 195, 'Non-smoker', 'Yes', 'Yes', 'Caucasian', 'High School', 'Education'),
+    -- Additional data entries here...
+    (50, 42, 'M', 'Treatment B', 5.9, 'Yes', '133/86', '2022-09-06', 27.7, 200, 'Non-smoker', 'Yes', 'No', 'African', 'Graduate', 'IT');
+
+-- Step 3: Renaming Column
+EXEC sp_rename 'Trial_1_Data.Gender', 'Sex';
+
+-- Step 4: Updating/Altering Data
+-- Using When Condition
+UPDATE Trial_1_Data
+SET SideEffect = CASE
+    WHEN PatientID IN (3, 22, 47) THEN 'Yes'
+    ELSE 'No'
+END;
+
+-- Using Where Condition
+UPDATE Trial_1_Data
+SET Cholesterol = 195
+WHERE PatientID = 5;
+
+-- Exploratory Data Analysis
+
+-- Question 1: Is there a significant difference in the efficacy scores between Treatment A and Treatment B?
+SELECT 
+    Treatment,
+    AVG(EfficacyScore) AS AvgEfficacyScore,
+    COUNT(*) AS SampleSize
+FROM
+    Trial_1_Data
+GROUP BY
+    Treatment;
+
+-- Question 2: What is the distribution of education levels among patients in different treatments?
+SELECT
+    Treatment,
+    EducationLevel,
+    COUNT(*) AS Number_of_Patients
+FROM 
+    Trial_1_Data
+GROUP BY 
+    Treatment,
+    EducationLevel
+ORDER BY
+    Treatment, Number_of_Patients DESC;
+
+-- Question 3: Does smoking status have an impact on treatment efficacy?
+SELECT
+    SmokingStatus,
+    AVG(EfficacyScore) AS AvgEfficacyScore,
+    COUNT(*) AS Number_Subjects
+FROM
+    Trial_1_Data
+GROUP BY
+    SmokingStatus;
+
+-- Question 4: Are there differences in treatment outcomes based on sex?
+SELECT
+    Sex,
+    AVG(EfficacyScore) AS AvgEfficacyScore,
+    COUNT(*) AS Number_Subjects
+FROM
+    Trial_1_Data
+GROUP BY
+    Sex;
+
+-- Question 5: Does the presence of diabetes affect treatment outcomes?
+SELECT
+    DiabetesStatus,
+    AVG(EfficacyScore) AS TreatmentOutcome,
+    COUNT(*) AS Number_Subject
+FROM 
+    Trial_1_Data
+GROUP BY
+    DiabetesStatus
+ORDER BY
+    DiabetesStatus DESC;
+
+-- Question 6: Are there any ethnic disparities in treatment responses and outcomes?
+SELECT
+    Ethnicity,
+    Treatment,
+    AVG(EfficacyScore) AS AverageOutcome,
+    COUNT(*) AS SampleSize
+FROM
+    Trial_1_Data
+GROUP BY
+    Ethnicity,
+    Treatment
+ORDER BY
+    AverageOutcome DESC;
+
+-- Question 7: What is the relationship between age and treatment preference?
+SELECT
+    Age,
+    Treatment,
+    COUNT(*) AS Frequency
+FROM 
+    Trial_1_Data
+GROUP BY
+    Age,
+    Treatment
+ORDER BY
+    Age, Frequency DESC;
+
+
