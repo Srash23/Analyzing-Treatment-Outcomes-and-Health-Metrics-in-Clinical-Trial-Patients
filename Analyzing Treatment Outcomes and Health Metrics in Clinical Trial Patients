@@ -35,7 +35,6 @@ VALUES
     (8, 39, 'M', 'Treatment B', 5.8, 'Yes', '123/78', '2022-02-09', 26.8, 185, 'Smoker', 'No', 'No', 'African', 'High School', 'Sales'),
     (9, 58, 'M', 'Treatment A', 8.5, 'No', '122/80', '2022-02-14', 29.7, 230, 'Non-smoker', 'Yes', 'Yes', 'Asian', 'Graduate', 'IT'),
     (10, 44, 'F', 'Treatment B', 6.9, 'Yes', '128/83', '2022-02-19', 27.4, 195, 'Non-smoker', 'Yes', 'Yes', 'Caucasian', 'High School', 'Education'),
-    -- Additional data entries here...
     (50, 42, 'M', 'Treatment B', 5.9, 'Yes', '133/86', '2022-09-06', 27.7, 200, 'Non-smoker', 'Yes', 'No', 'African', 'Graduate', 'IT');
 
 -- Step 3: Renaming Column
