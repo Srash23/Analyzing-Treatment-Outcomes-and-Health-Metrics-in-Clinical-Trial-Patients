@@ -1,73 +1,97 @@
-# Clinical Trial Data Analysis Using SQL
+# Clinical Trial SQL Analysis Pipeline
 
-### Introduction
+This repository showcases a SQL-based project that simulates the design, population, and analysis of a clinical trial dataset. It focuses on evaluating treatment efficacy, demographic trends, and medical condition impacts using structured queries.
 
-This study explores the differences in treatment outcomes and side effects among patients receiving different treatments. By analyzing demographic and health-related factors such as age, sex, smoking status, diabetes status, cholesterol levels, BMI, and education level, we aim to identify significant correlations and disparities. The study involves creating a structured database, inserting patient data, and performing a series of SQL queries to extract meaningful insights.
-![_- visual selection](https://github.com/user-attachments/assets/9d81f400-eb65-4e33-9ea3-d4eb3fa6b59d)
+## Project Overview
+This SQL pipeline performs:
+- Creation of a patient clinical trial table
+- Insertion of synthetic trial data
+- Data cleaning and transformation
+- Exploratory queries to identify patterns across treatment outcomes, comorbidities, and patient attributes
 
-### Why is This Analysis Important?
+## Table Schema: `Trial_1_Data`
+| Column Name       | Data Type      | Description                             |
+|-------------------|----------------|-----------------------------------------|
+| PatientID         | INT            | Unique patient ID                       |
+| Age               | INT            | Age of the participant                  |
+| Sex               | VARCHAR(6)     | Biological sex                          |
+| Treatment         | VARCHAR(11)    | Treatment group (A/B)                   |
+| EfficacyScore     | DECIMAL(4,2)   | Treatment response score (0–10 scale)   |
+| SideEffect        | VARCHAR(3)     | 'Yes' or 'No'                           |
+| BloodPressure     | VARCHAR(10)    | e.g., '120/80'                          |
+| DateVisited       | DATE           | Date of clinical visit                  |
+| BMI               | DECIMAL(5,2)   | Body Mass Index                         |
+| Cholesterol       | INT            | Blood cholesterol level (mg/dL)         |
+| SmokingStatus     | VARCHAR(10)    | Smoker / Non-smoker                     |
+| DiabetesStatus    | VARCHAR(3)     | 'Yes' or 'No'                           |
+| FamilyHistory     | VARCHAR(3)     | Family history of disease               |
+| Ethnicity         | VARCHAR(20)    | Reported ethnicity                      |
+| EducationLevel    | VARCHAR(20)    | e.g., 'Graduate', 'High School'         |
+| Occupation        | VARCHAR(20)    | Profession                              |
 
-1. Improves Clinical Decision-Making: Identifies patterns in treatment efficacy based on demographic and health factors.
-2. Personalized Medicine: Helps tailor treatments based on patient profiles to maximize efficacy and minimize side effects.
-3. Public Health Insights: Provides data-driven evidence to address healthcare disparities and optimize treatment strategies.
+## SQL Workflow Steps
 
-### Installation and Usage (For End-Users)
+### Create and Populate Table
+- Create the `Trial_1_Data` table
+- Insert 10+ patient records with diverse attributes
 
-1. Install MySQL or any other SQL-compatible database.
+### Data Cleaning & Updating
+- Rename column `Gender` to `Sex`
+- Update cholesterol and side effect status conditionally using `CASE` and `WHERE`
 
-2. Open your SQL client and create a new database.
+### Exploratory Data Analysis (EDA)
 
-3. Run the provided SQL script to create the Trial_1_Data table and insert patient records.
+#### Q1: Treatment Efficacy
+```sql
+SELECT Treatment, AVG(EfficacyScore), COUNT(*) FROM Trial_1_Data GROUP BY Treatment;
+```
 
-4. Execute the analysis queries to gain insights into treatment outcomes.
+#### Q2: Education Distribution by Treatment
+```sql
+SELECT Treatment, EducationLevel, COUNT(*) FROM Trial_1_Data GROUP BY Treatment, EducationLevel;
+```
 
-### Installation and Usage
+#### Q3: Smoking vs Efficacy
+```sql
+SELECT SmokingStatus, AVG(EfficacyScore) FROM Trial_1_Data GROUP BY SmokingStatus;
+```
 
-Clone the repository:
+#### Q4: Sex-based Outcomes
+```sql
+SELECT Sex, AVG(EfficacyScore) FROM Trial_1_Data GROUP BY Sex;
+```
 
-1. git clone https://github.com/Srash23/SQL-Clinical-Trial-Analysis.git
+#### Q5: Diabetes Status Impact
+```sql
+SELECT DiabetesStatus, AVG(EfficacyScore) FROM Trial_1_Data GROUP BY DiabetesStatus;
+```
 
-2. Open the SQL script in an SQL editor (e.g., MySQL Workbench, PostgreSQL, SQLite, etc.).
+#### Q6: Ethnicity and Treatment Outcomes
+```sql
+SELECT Ethnicity, Treatment, AVG(EfficacyScore) FROM Trial_1_Data GROUP BY Ethnicity, Treatment;
+```
 
-3. Modify or extend the queries to explore additional insights.
+#### Q7: Age-wise Treatment Preference
+```sql
+SELECT Age, Treatment, COUNT(*) FROM Trial_1_Data GROUP BY Age, Treatment;
+```
 
-4. Submit pull requests for any improvements or additional analyses.
+## Example Results
+| Treatment   | Avg Efficacy | Sample Size |
+|-------------|--------------|-------------|
+| Treatment A | 8.1          | 5           |
+| Treatment B | 6.3          | 6           |
 
-### Methodology
+## Applications
+- Simulated trial reporting
+- Healthcare analytics training
+- Interview-ready SQL case
+- Foundation for data dashboarding
 
-#### Step 1: Creating the Database Table
+## Tools Used
+- SQL Server / PostgreSQL / MySQL
+- SQL IDEs (DBeaver, Azure Data Studio, pgAdmin)
+- Sample generation via static `INSERT` scripts
 
-Defines Trial_1_Data table with attributes like PatientID, Age, Sex, Treatment, EfficacyScore, SideEffect, and other health-related factors.
-
-#### Step 2: Inserting Data
-
-Populates the table with sample patient records reflecting diverse demographic and clinical profiles.
-
-#### Step 3: Data Processing
-
-Modifies table structure (e.g., renaming columns, updating values based on conditions).
-
-#### Step 4: Exploratory Data Analysis
-
-We investigate multiple research questions using SQL queries:
-1. **Comparing Treatment Efficacy:** Determines if there is a significant difference between Treatment A and Treatment B efficacy scores.
-2. **Education Levels and Treatment Distribution:** Examine if education level influences treatment selection.
-3. **Smoking Status and Treatment Efficacy:** Analyzes whether smoking impacts treatment outcomes.
-4. **Sex-Based Differences in Outcomes:** Evaluates if treatment efficacy varies based on sex.
-5. **Diabetes and Treatment Outcomes:** Identifies if diabetes affects treatment efficacy.
-6. **Ethnic Disparities in Treatment Response:** Determines whether different ethnic groups respond differently to treatments.
-7. **Age and Treatment Preferences:** Explores how age influences treatment choices.
-
-### Results and Discussion
-#### Treatment A vs. Treatment B:
-Aggregated results indicate whether one treatment is more effective than the other.
-
-#### Demographic Influence on Treatment Outcomes:
-Identifies any disparities in treatment efficacy across different age groups, ethnicities, and health conditions.
-
-#### Predictive Indicators:
-Highlights potential factors influencing treatment success or failure.
-
-### Conclusion
-
-This SQL-based clinical trial analysis demonstrates how structured data management and querying can reveal crucial insights into treatment efficacy and patient demographics. These findings can help optimize medical treatment plans and support data-driven healthcare decisions.
+## License
+MIT License – free for academic, personal, and professional use.
